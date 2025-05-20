@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inherit the standard Sale Order form view to introduce:
+        - Sale admin control logic
+        - Manager reference editing based on admin check
+        - Auto workflow toggle
+    -->
+    <record id="view_sale_order_form_inherit_form" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!--
+                Insert additional fields after the customer field (partner_id).
+                These include:
+                - is_sale_admin: Computed, invisible field to track if current user is a sale admin
+                - is_check_sale_admin: Boolean used for conditional UI logic
+                - manager_reference: Only editable if the user is a sale admin
+            -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <!-- Invisible technical field to determine user group -->
+                <field name="is_sale_admin" invisible="1"/>
+                <!-- Helper field for view logic based on user group -->
+                <field name="is_check_sale_admin" invisible="1"/>
+                <!-- Editable only by sale admins -->
+                <field name="manager_reference" readonly="is_check_sale_admin != True"/>
+            </xpath>
+
+            <!--
+                Insert the is_auto_workflow boolean after the payment term field.
+                This field enables automatic processing of delivery, invoicing, and payment on confirmation.
+            -->
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="is_auto_workflow"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

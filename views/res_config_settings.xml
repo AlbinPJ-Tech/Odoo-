@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Inherit the Settings view from the sale_management module
+        to add a custom section for configuring Sale Order Limit settings.
+    -->
+    <record id="view_res_config_settings_inherit_sale" model="ir.ui.view">
+        <field name="name">res.config.settings.sale.order.limit</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale_management.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <!--
+                Insert the custom settings block right after the 'discount_sale_order_lines' setting.
+                This block allows toggling and configuring a sale order amount limit.
+            -->
+            <xpath expr="//setting[@id='discount_sale_order_lines']" position="after">
+
+                <!--
+                    Custom setting box to enable and define Sale Order Limit.
+                    Appears only if 'Enable Sale Order Limit' is checked.
+                -->
+                <div class="col-12 col-lg-6 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <!-- Checkbox to enable the limit feature -->
+                        <field name="enable_sale_order_limit"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <!-- Label for the setting -->
+                        <label for="enable_sale_order_limit" string="Sale Order Limit"/>
+
+                        <!-- Amount field becomes visible only if checkbox is enabled -->
+                        <div class="content-group" invisible="not enable_sale_order_limit">
+                            <div class="row mt16">
+                                <!-- Float field for setting the limit value -->
+                                <field name="sale_order_limit" required="enable_sale_order_limit"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--
+            Define a new user group: Sale Admin.
+            This group is under the Sales module category and inherits permissions from the built-in 'Sales Manager' group.
+        -->
+        <record id="group_sale_admin_access" model="res.groups">
+            <field name="name">Sale Admin</field>
+            <field name="category_id" ref="base.module_category_sales_sales"/>
+            <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_manager'))]"/>
+        </record>
+
+        <!--
+            Assign the 'Sale Admin' group to the default base user.
+            This ensures that the default user has the permissions and access granted by the Sale Admin group.
+        -->
+        <record id="base.default_user" model="res.users">
+            <field name="groups_id" eval="[(4,ref('sale_admin_access.group_sale_admin_access'))]"/>
+        </record>
+
+    </data>
+</odoo>
